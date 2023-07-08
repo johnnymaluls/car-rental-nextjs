@@ -5,6 +5,8 @@ import { fetchCars } from "@/utils";
 export default async function Home() {
   const allCars = await fetchCars();
 
+  console.log(allCars);
+
   const isDataEmpty =
     !Array.isArray(allCars) || allCars.length == 0 || !allCars;
 
@@ -24,10 +26,10 @@ export default async function Home() {
           </div>
 
           {!isDataEmpty ? (
-            <section>
+            <section className="w-full">
               <div className="home__cars-wrapper">
                 {allCars?.map((car) => (
-                  <CarCard />
+                  <CarCard car={car} />
                 ))}
               </div>
             </section>
