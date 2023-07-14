@@ -35,3 +35,21 @@ export interface CarDetailsProps {
   closeModal: () => void;
   car: CarProps;
 }
+
+export interface FilterProps {
+  manufacturer: string;
+  year: string;
+  fuel: string;
+  limit: string;
+  model: string;
+}
+
+export interface OptionProps {
+  title: string;
+  value: string;
+}
+
+export interface CustomFilterProps {
+  title: string;
+  options: OptionProps[];
+}
