@@ -1,7 +1,7 @@
 "use client";
 
-import { CarCard, CustomFilter, Hero, SearchBar } from "@/components";
-import { fetchCars } from "@/utils";
+import { CarCard, CustomFilter, Hero, SearchBar, ShowMore } from "@/components";
+import { fetchCars, isArrayEmpty } from "@/utils";
 import { useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import { fuels, yearsOfProduction } from "@/constants";
@@ -14,10 +14,8 @@ const CarCatalogue = () => {
   const fuel = searchParams.get("fuel");
   const limit = searchParams.get("limit");
   const model = searchParams.get("model");
+  const pageNumber = searchParams.get("pageNumber");
 
-  //let allCars = fetchCars("toyota");
-  //   const isDataEmpty =
-  //     !Array.isArray(allCars) || allCars.length == 0 || !allCars;
   const [isLoading, setIsLoading] = useState(false);
   const [isDataEmpty, setIsDataEmpty] = useState(true);
   const [allCars, setAllCars] = useState([]);
@@ -29,19 +27,17 @@ const CarCatalogue = () => {
 
   const SearchCar = async () => {
     setIsLoading(true);
-    console.log("mga value pag search");
-    console.log(`${manufacturer}, ${year}, ${fuel}, ${limit}, ${model}`);
-
     // params or default value
     const response = await fetchCars({
       manufacturer: manufacturer || "",
       year: year || "2022",
-      fuel: fuel || "gas",
+      fuel: fuel || "",
       limit: limit || "12",
       model: model || "",
     });
 
-    console.log(response);
+    const isEmpty = isArrayEmpty(response);
+    setIsDataEmpty(isEmpty);
     setAllCars(response);
     setIsLoading(false);
   };
@@ -64,19 +60,33 @@ const CarCatalogue = () => {
             <CustomFilter title="year" options={yearsOfProduction} />
           </div>
         </div>
-
         {!isLoading ? (
-          <section className="w-full">
-            <div className="home__cars-wrapper">
-              {allCars?.map((car: any) => (
-                <CarCard car={car} key={generateUniqueKey("item")} />
-              ))}
-            </div>
-          </section>
+          <div>
+            {!isDataEmpty ? (
+              <section className="w-full">
+                <div className="home__cars-wrapper">
+                  {allCars?.map((car: any) => (
+                    <CarCard car={car} key={generateUniqueKey("test")} />
+                  ))}
+                </div>
+                <ShowMore
+                  pageNumber={(parseInt(pageNumber!) || 12) / 12}
+                  isNext={(parseInt(limit!) || 12) > allCars.length}
+                />
+              </section>
+            ) : (
+              <div className="home__error-container">
+                <h2 className="text-black text-xl font-bold">
+                  Oops, no results
+                </h2>
+              </div>
+            )}
+          </div>
         ) : (
-          <div className="home__error-container">
-            <h2 className="text-black text-xl font-bold">Oops, no results</h2>
-            {/* <p>{allCars?.message}</p> */}
+          <div>
+            <h2 className="text-black text-xl font-bold">
+              Loading cars.. please wait..
+            </h2>
           </div>
         )}
       </div>

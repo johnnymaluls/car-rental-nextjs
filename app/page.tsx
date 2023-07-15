@@ -1,3 +1,4 @@
+"use client";
 import { CarCatalogue, Hero } from "@/components";
 
 export default function Home() {
