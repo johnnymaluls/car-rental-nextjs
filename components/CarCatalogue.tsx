@@ -95,6 +95,7 @@ const CarCatalogue = () => {
               alt="loading-image"
               width={50}
               height={50}
+              className="mx-5"
             />
             <h2 className="text-black text-xl font-bold">
               Loading cars.. please wait..
