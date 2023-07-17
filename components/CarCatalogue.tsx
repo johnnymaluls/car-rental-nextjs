@@ -3,43 +3,44 @@
 import { CarCard, CustomFilter, Hero, SearchBar, ShowMore } from "@/components";
 import { fetchCars, isArrayEmpty } from "@/utils";
 import { useState, useEffect } from "react";
-import { useSearchParams } from "next/navigation";
 import { fuels, yearsOfProduction } from "@/constants";
+import Image from "next/image";
 
 const CarCatalogue = () => {
-  //Get the Parameters
-  const searchParams = useSearchParams();
-  const manufacturer = searchParams.get("manufacturer");
-  const year = searchParams.get("year");
-  const fuel = searchParams.get("fuel");
-  const limit = searchParams.get("limit");
-  const model = searchParams.get("model");
-  const pageNumber = searchParams.get("pageNumber");
-
   const [isLoading, setIsLoading] = useState(false);
   const [isDataEmpty, setIsDataEmpty] = useState(true);
   const [allCars, setAllCars] = useState([]);
+  const [manufacturer, setManufacturer] = useState("");
+  const [model, setModel] = useState("");
+  const [year, setYear] = useState("2022");
+  const [fuel, setFuel] = useState("");
+  const [limit, setLimit] = useState("12");
+  const pageNumber = "";
 
   useEffect(() => {
-    console.log("gumana useeffect");
     SearchCar();
-  }, [searchParams]);
+  }, [manufacturer, model, year, fuel, limit]);
 
   const SearchCar = async () => {
     setIsLoading(true);
-    // params or default value
-    const response = await fetchCars({
-      manufacturer: manufacturer || "",
-      year: year || "2022",
-      fuel: fuel || "",
-      limit: limit || "12",
-      model: model || "",
-    });
-
-    const isEmpty = isArrayEmpty(response);
-    setIsDataEmpty(isEmpty);
-    setAllCars(response);
-    setIsLoading(false);
+    try {
+      // params or default value
+      const response = await fetchCars({
+        manufacturer: manufacturer || "",
+        year: year,
+        fuel: fuel,
+        limit: limit,
+        model: model,
+      });
+      console.log(response);
+      const isEmpty = isArrayEmpty(response);
+      setIsDataEmpty(isEmpty);
+      setAllCars(response);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const generateUniqueKey = (prefix: string) => {
@@ -54,10 +55,14 @@ const CarCatalogue = () => {
         <h1 className="text-4xl font-extrabold">Car Catalogue</h1>
         <p>Explore the cars you might like</p>
         <div className="home__filters">
-          <SearchBar />
+          <SearchBar setManufacturer={setManufacturer} setModel={setModel} />
           <div className="home__filter-container">
-            <CustomFilter title="fuel" options={fuels} />
-            <CustomFilter title="year" options={yearsOfProduction} />
+            <CustomFilter title="fuel" options={fuels} setFilter={setFuel} />
+            <CustomFilter
+              title="year"
+              options={yearsOfProduction}
+              setFilter={setYear}
+            />
           </div>
         </div>
         {!isLoading ? (
@@ -70,8 +75,9 @@ const CarCatalogue = () => {
                   ))}
                 </div>
                 <ShowMore
-                  pageNumber={(parseInt(pageNumber!) || 12) / 12}
-                  isNext={(parseInt(limit!) || 12) > allCars.length}
+                  pageNumber={parseInt(pageNumber) / 12}
+                  isNext={parseInt(limit) > allCars.length}
+                  setLimit={setLimit}
                 />
               </section>
             ) : (
@@ -83,7 +89,13 @@ const CarCatalogue = () => {
             )}
           </div>
         ) : (
-          <div>
+          <div className="mt-16 w-full flex-center">
+            <Image
+              src="/loader.svg"
+              alt="loading-image"
+              width={50}
+              height={50}
+            />
             <h2 className="text-black text-xl font-bold">
               Loading cars.. please wait..
             </h2>

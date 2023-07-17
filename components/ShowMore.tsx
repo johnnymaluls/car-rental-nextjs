@@ -1,15 +1,11 @@
 import React from "react";
 import CustomButton from "./CustomButton";
-import { useRouter } from "next/navigation";
 import { ShowMoreProps } from "@/types";
-import { updateSearchParams } from "@/utils";
 
-const ShowMore = ({ pageNumber, isNext }: ShowMoreProps) => {
-  const router = useRouter();
+const ShowMore = ({ pageNumber, isNext, setLimit }: ShowMoreProps) => {
   const handleNavigation = () => {
     const newLimit = (pageNumber + 1) * 12;
-    const newPathName = updateSearchParams("limit", String(newLimit));
-    router.push(newPathName);
+    setLimit(newLimit.toString());
   };
 
   return (

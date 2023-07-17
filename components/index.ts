@@ -9,6 +9,7 @@ import CarCard from "./CarCard";
 import CarDetails from "./CarDetails";
 import CarCatalogue from "./CarCatalogue";
 import ShowMore from "./ShowMore";
+import DialogModal from "./DialogModal";
 
 export {
   Hero,
@@ -22,4 +23,5 @@ export {
   CarDetails,
   CarCatalogue,
   ShowMore,
+  DialogModal,
 };
