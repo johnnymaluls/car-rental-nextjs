@@ -14,7 +14,7 @@ const CarCatalogue = () => {
   const [model, setModel] = useState("");
   const [year, setYear] = useState("2022");
   const [fuel, setFuel] = useState("");
-  const [limit, setLimit] = useState("12");
+  const [limit, setLimit] = useState(12);
   const pageNumber = "";
 
   useEffect(() => {
@@ -29,7 +29,7 @@ const CarCatalogue = () => {
         manufacturer: manufacturer || "",
         year: year,
         fuel: fuel,
-        limit: limit,
+        limit: `${limit}`,
         model: model,
       });
       console.log(response);
@@ -75,8 +75,8 @@ const CarCatalogue = () => {
                   ))}
                 </div>
                 <ShowMore
-                  pageNumber={parseInt(pageNumber) / 12}
-                  isNext={parseInt(limit) > allCars.length}
+                  pageNumber={limit / 12}
+                  isNext={limit > allCars.length}
                   setLimit={setLimit}
                 />
               </section>

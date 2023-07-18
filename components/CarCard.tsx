@@ -18,6 +18,13 @@ const CarCard = ({ car }: CarCardProps) => {
 
   const [isOpen, setIsOpen] = useState(false);
 
+  const [imageSrc, setImageSrc] = useState(generateCarImageUrl(car));
+
+  const onError = () => {
+    // Set the image src to a default image if the src link returns an error
+    setImageSrc("/getimage.jpg");
+  };
+
   return (
     <div className="car-card group">
       <div className="car-card__content">
@@ -32,11 +39,12 @@ const CarCard = ({ car }: CarCardProps) => {
       </p>
       <div className="relative w-full h-40 my-3 object-contain">
         <Image
-          src={generateCarImageUrl(car)}
+          src={imageSrc}
           alt="car-model"
           fill
           priority
           className="object-contain"
+          onError={onError}
         />
       </div>
 

@@ -5,7 +5,7 @@ import { ShowMoreProps } from "@/types";
 const ShowMore = ({ pageNumber, isNext, setLimit }: ShowMoreProps) => {
   const handleNavigation = () => {
     const newLimit = (pageNumber + 1) * 12;
-    setLimit(newLimit.toString());
+    setLimit(newLimit);
   };
 
   return (
