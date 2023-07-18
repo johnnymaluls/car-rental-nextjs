@@ -15,7 +15,6 @@ const CarCatalogue = () => {
   const [year, setYear] = useState("2022");
   const [fuel, setFuel] = useState("");
   const [limit, setLimit] = useState(12);
-  const pageNumber = "";
 
   useEffect(() => {
     SearchCar();
@@ -27,7 +26,7 @@ const CarCatalogue = () => {
       // params or default value
       const response = await fetchCars({
         manufacturer: manufacturer || "",
-        year: year,
+        year: year || "2022",
         fuel: fuel,
         limit: `${limit}`,
         model: model,
@@ -41,12 +40,6 @@ const CarCatalogue = () => {
     } finally {
       setIsLoading(false);
     }
-  };
-
-  const generateUniqueKey = (prefix: string) => {
-    const timestamp = Date.now().toString();
-    const randomSuffix = Math.random().toString(36).substring(2, 8);
-    return `${prefix}-${timestamp}-${randomSuffix}`;
   };
 
   return (
@@ -70,8 +63,8 @@ const CarCatalogue = () => {
             {!isDataEmpty ? (
               <section className="w-full">
                 <div className="home__cars-wrapper">
-                  {allCars?.map((car: any) => (
-                    <CarCard car={car} key={generateUniqueKey("test")} />
+                  {allCars?.map((car: any, index: any) => (
+                    <CarCard car={car} key={`car-${index}`} />
                   ))}
                 </div>
                 <ShowMore

@@ -5,7 +5,11 @@ import CustomButton from "./CustomButton";
 
 const Hero = () => {
   const handleScroll = () => {
-    console.log("handle scroll");
+    const nextSection = document.getElementById("discover");
+
+    if (nextSection) {
+      nextSection.scrollIntoView({ behavior: "smooth" });
+    }
   };
 
   return (

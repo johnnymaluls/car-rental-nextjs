@@ -22,7 +22,7 @@ const CarCard = ({ car }: CarCardProps) => {
 
   const onError = () => {
     // Set the image src to a default image if the src link returns an error
-    setImageSrc("/getimage.jpg");
+    setImageSrc("/default-image.jpg");
   };
 
   return (
